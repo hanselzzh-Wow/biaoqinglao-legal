@@ -37,7 +37,7 @@
   <li><strong>截图不会上传。</strong>识别表情、切图、识字都在你的 iPhone 上完成。</li>
   <li>没有账号，不收集姓名、手机号、邮箱、位置、通讯录，不做跟踪，没有广告，不含任何第三方统计或广告 SDK。</li>
   <li>为了把截图里的表情换成高清原图，App 会把从切片上算出的<strong>数字特征和识别出的文字</strong>发给我们的匹配服务。服务器用完即弃，不保存。</li>
-  <li>「帮着改进匹配」可以随时关闭。开着时，只回传一个随机编号和「对 / 换错了」之一。</li>
+  <li>「帮着改进匹配」可以随时关闭。开着时，会回传「对 / 换错了」，并保存没换上原图的那几张的数字特征和识别文字，用来统计真实匹配率（详见 2.3）。</li>
 </ul>
 </div>
 
@@ -62,19 +62,22 @@
   <tr><td>请求编号</td><td>每次随机生成，只用于把结果对应回卡片，不与设备或身份关联。</td></tr>
   <tr><td>候选编号</td><td>最多 8 个表情库里的编号。</td></tr>
 </table></div>
-<p>这些内容只用于这一次匹配，<strong>服务器不保存</strong>。截图本身和切好的图片不会发送。</p>
+<p>这些内容只用于这一次匹配，<strong>服务器不保存</strong>（「帮着改进匹配」开启时的例外见 2.3）。截图本身和切好的图片不会发送。</p>
 
 <h3>2.2 下载表情原图</h3>
 <p>显示或保存表情时，App 按表情库编号向匹配服务请求对应的图片。</p>
 
 <h3>2.3「帮着改进匹配」（可关闭）</h3>
-<p>你点「换成原图」表示这张对，长按「换回截图里那张」表示换错了。开启时，App 会把这两个动作之一连同服务器下发的随机编号回传。服务器据此保存一条记录，包括：</p>
+<p>开启时，App 会告诉匹配服务两件事。关闭方法：首页底部的隐私说明 →「帮着改进匹配」。关闭后两件事一次都不会发送。</p>
+<p><strong>一、换得对不对。</strong>你点「换成原图」表示这张对，长按「换回截图里那张」表示换错了。App 会把这两个动作之一连同服务器下发的随机编号回传。服务器据此保存一条记录，包括：</p>
 <ul>
   <li>命中的表情库编号；</li>
   <li>这次匹配的相似度统计值（从候选之间的比较算出，<strong>不含</strong>你的视觉特征、识别文字或任何图片）；</li>
   <li>动作（对 / 换错了）、索引版本、日期（只精确到天）。</li>
 </ul>
-<p>这条记录不含设备标识、IP 地址或任何能识别你的信息，只用于改进「什么时候敢自动替换」的判断。如果匹配后 30 分钟内没有回传，服务器会丢弃这次的临时数据。关闭方法：首页底部的隐私说明 →「帮着改进匹配」。关闭后一次都不会发送。</p>
+<p>如果匹配后 30 分钟内没有回传，服务器会丢弃这次的临时数据。</p>
+<p><strong>二、真实匹配率（1.0 (4) 起）。</strong>每识别完一张截图，App 会报告：几张自动换上了原图、几张给出了候选但没替换、几张没找到、几次请求失败。对没有换上原图的切片（每次最多 16 张），还会附上它的 768 个视觉特征数字、表情上识别出的文字（最多 40 字）和宽高；给出了候选的，再附上候选的表情库编号和相似度差值。服务器会<strong>保存</strong>这些内容，用来统计真实的匹配率、判断表情库缺什么，并在表情库扩充后重新计算「以前没找到的，现在能找到多少」。</p>
+<p>以上两类记录都不含截图、切好的图片、设备标识或 IP 地址，时间只精确到天，不与你的身份关联，只用于改进匹配。</p>
 
 <h3>2.4 网络层</h3>
 <p>和任何联网服务一样，你的 IP 地址会经过网络服务商和我们的服务器。服务器会在<strong>内存</strong>里短暂保留最近约 200 条请求的时间、IP 地址和请求类型，用于防滥用限流和排查连接故障。它不写入存储，服务重启即清空，也不对外提供。</p>
@@ -133,7 +136,8 @@
   <li><strong>Screenshots never leave your device.</strong> Detection, cropping, feature extraction and text recognition run on-device. Your packs, favorites and settings stay on the device.</li>
   <li>No account, no tracking, no ads, no third-party analytics or advertising SDKs. We do not collect names, phone numbers, emails, location, contacts or advertising identifiers.</li>
   <li>To find the original sticker, the app sends our matching service (<code>match.hanselzhang.com</code>) a 768-number visual feature vector, any recognized text, the crop's width and height, a random request ID and up to 8 library candidate IDs. These are used only for that match and are not stored.</li>
-  <li>“Help improve matching” (can be turned off): when you accept or revert a replacement, the app sends a random token plus “accept” or “revert”. The server stores the matched library ID, similarity statistics (no feature vectors, text or images), the action and the date (day only). Nothing identifies you. Unused pending data is discarded after 30 minutes.</li>
+  <li>“Help improve matching” (can be turned off): when you accept or revert a replacement, the app sends a random token plus “accept” or “revert”. The server stores the matched library ID, similarity statistics (no feature vectors, text or images), the action and the date (day only). Unused pending data is discarded after 30 minutes.</li>
+  <li>Also under “Help improve matching” (from version 1.0 (4)): after each screenshot, the app reports how many stickers were replaced, offered as candidates, not found, or failed. For up to 16 crops that were not replaced, it includes the 768-number feature vector, recognized text (up to 40 characters) and size. The server <strong>stores</strong> these to measure real-world match rates and see what the library is missing. No screenshots, crop images, device identifiers or IP addresses; dates are kept to the day.</li>
   <li>The server keeps the time, IP address and request type of the last ~200 requests in memory only, for rate limiting and troubleshooting. They are never written to storage.</li>
   <li>“Search by meaning” sends only the text you typed to Apple Private Cloud Compute, only when you tap it. It does not pass through our servers.</li>
   <li>Service providers: Cloudflare (network), Oracle Cloud (server hosting), Cloudflare R2 (sticker library storage), Apple (Private Cloud Compute, distribution). We do not sell or share data with advertisers.</li>
