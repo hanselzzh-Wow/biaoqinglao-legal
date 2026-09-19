@@ -29,7 +29,7 @@
 <main>
 
 <h1>表情捞 隐私政策</h1>
-<p class="meta">生效日期：2026 年 9 月 17 日　·　开发者：Hansel Zhang　·　联系邮箱：<a href="mailto:hansel.zzh@icloud.com">hansel.zzh@icloud.com</a><br>
+<p class="meta">生效日期：2026 年 9 月 17 日（9 月 19 日更新：新增「AI 增强」）　·　开发者：Hansel Zhang　·　联系邮箱：<a href="mailto:hansel.zzh@icloud.com">hansel.zzh@icloud.com</a><br>
 <a href="#en">English summary below</a></p>
 
 <div class="summary">
@@ -37,6 +37,7 @@
   <li><strong>截图不会上传。</strong>识别表情、切图、识字都在你的 iPhone 上完成。</li>
   <li>没有账号，不收集姓名、手机号、邮箱、位置、通讯录，不做跟踪，没有广告，不含任何第三方统计或广告 SDK。</li>
   <li>为了把截图里的表情换成高清原图，App 会把从切片上算出的<strong>数字特征和识别出的文字</strong>发给我们的匹配服务。服务器用完即弃，不保存。</li>
+  <li><strong>「AI 增强」默认关闭。</strong>只有你明确同意后，App 才会把表情切片（缩小后的图片）和搜索文字经我们的服务器交给第三方 AI（智谱 AI 或 Google Gemini），详见第 3 节。</li>
   <li>「帮着改进匹配」可以随时关闭。开着时，会回传「对 / 换错了」，并保存没换上原图的那几张的数字特征和识别文字，用来统计真实匹配率（详见 2.3）。</li>
 </ul>
 </div>
@@ -62,7 +63,7 @@
   <tr><td>请求编号</td><td>每次随机生成，只用于把结果对应回卡片，不与设备或身份关联。</td></tr>
   <tr><td>候选编号</td><td>最多 8 个表情库里的编号。</td></tr>
 </table></div>
-<p>这些内容只用于这一次匹配，<strong>服务器不保存</strong>（「帮着改进匹配」开启时的例外见 2.3）。截图本身和切好的图片不会发送。</p>
+<p>这些内容只用于这一次匹配，<strong>服务器不保存</strong>（「帮着改进匹配」开启时的例外见 2.3）。截图本身不会发送；切好的图片只在你打开「AI 增强」后才会发送（见第 3 节）。</p>
 
 <h3>2.2 下载表情原图</h3>
 <p>显示或保存表情时，App 按表情库编号向匹配服务请求对应的图片。</p>
@@ -82,14 +83,23 @@
 <h3>2.4 网络层</h3>
 <p>和任何联网服务一样，你的 IP 地址会经过网络服务商和我们的服务器。服务器会在<strong>内存</strong>里短暂保留最近约 200 条请求的时间、IP 地址和请求类型，用于防滥用限流和排查连接故障。它不写入存储，服务重启即清空，也不对外提供。</p>
 
-<h2>3. 发送给 Apple 的（「按意思找」）</h2>
-<p>在「搜表情」里点「按意思找」时，你在搜索框里打的那句话会发送给 Apple 的私有云计算（Private Cloud Compute），换成几种表情上常见的说法，再回到设备上搜索。</p>
+<h2>3. 「按意思找」与「AI 增强」</h2>
+<h3>3.1 按意思找</h3>
+<p>在「搜表情」里点「按意思找」时，你在搜索框里打的那句话会被换成几种表情上常见的说法，再回到设备上搜索。只发送这一句话，只在你点击的那一下发送。</p>
 <ul>
-  <li>只发送这一句话，只在你点击的那一下发送；截图、切片和特征都不会发送。</li>
-  <li>这条请求不经过我们的服务器，我们看不到。</li>
-  <li>按 Apple 对私有云计算的公开说明，你的数据只用于完成这一次请求，不会被保存，Apple 也无法访问。详见 <a href="https://security.apple.com/blog/private-cloud-compute/">Apple 私有云计算说明</a>。</li>
-  <li>这项功能需要 iOS 27 及支持 Apple 智能的设备；不满足条件时按钮不会出现。</li>
+  <li><strong>没打开「AI 增强」时</strong>：只在支持 Apple 私有云计算（Private Cloud Compute，iOS 27 及支持 Apple 智能的设备）的设备上可用，这句话交给 Apple，不经过我们的服务器。按 Apple 对私有云计算的<a href="https://security.apple.com/blog/private-cloud-compute/">公开说明</a>，数据只用于完成这一次请求，不会被保存，Apple 也无法访问。</li>
+  <li><strong>打开了「AI 增强」时</strong>：这句话经我们的服务器交给第三方 AI 处理，见 3.2。</li>
 </ul>
+<h3>3.2 AI 增强（可选，默认关闭）</h3>
+<p>「AI 增强」默认关闭。你第一次点「AI 配文造梗」、或在不支持 Apple 私有云计算的设备上点「按意思找」时，App 会先弹出说明请你选择；你也可以随时在首页底部「隐私与申诉」里打开或关闭。<strong>在你同意之前，以下内容一个字节都不会发送。</strong></p>
+<p>打开后会发送：</p>
+<div class="table-wrap"><table>
+  <tr><th>什么时候</th><th>发送的内容</th></tr>
+  <tr><td>你点「AI 配文造梗」</td><td>那张表情的切片图片（缩小到最长边 360 像素的 JPEG）和表情上识别出的文字</td></tr>
+  <tr><td>你点「按意思找」</td><td>搜索框里的那句话</td></tr>
+  <tr><td>识别截图时拿不准的那几张（自动）</td><td>切片图片（缩小到最长边 240 像素的 JPEG）和表情库里最多 3 个候选的编号，请 AI 判断是不是同一张</td></tr>
+</table></div>
+<p>这些内容由我们的服务器转交给第三方 AI 服务商：<strong>智谱 AI（北京智谱华章科技股份有限公司，GLM 模型）或 Google（Gemini API）</strong>，使用哪一家由服务器配置决定。我们的服务器只转发、不保存；第三方按其 API 服务条款处理，可能会保存一段时间或用于改进其服务。整张截图不会发送，也不带任何能识别你设备或身份的信息。关闭后一次都不会再发送。</p>
 
 <h2>4. 服务提供方</h2>
 <div class="table-wrap"><table>
@@ -98,6 +108,7 @@
   <tr><td>Oracle Cloud</td><td>运行匹配服务的服务器。</td></tr>
   <tr><td>Cloudflare R2</td><td>存放表情库原图（不含任何用户数据）。</td></tr>
   <tr><td>Apple</td><td>「按意思找」使用的私有云计算；App 的分发（App Store / TestFlight）。</td></tr>
+  <tr><td>智谱 AI / Google（Gemini API）</td><td>仅在你打开「AI 增强」后：处理切片图片、识别文字和搜索文字（见第 3.2 节）。</td></tr>
 </table></div>
 <p>我们不出售数据，不与广告商或数据经纪商共享数据。</p>
 
@@ -111,7 +122,7 @@
 
 <h2>6. 你的选择</h2>
 <ul>
-  <li>随时在「首页底部的隐私说明」里关闭「帮着改进匹配」；</li>
+  <li>随时在「首页底部的隐私说明」里关闭「帮着改进匹配」和「AI 增强」；</li>
   <li>可以不授权相册访问，改为从别的 App 分享截图给表情捞；</li>
   <li>删除 App 会清除所有本地数据；</li>
   <li>我们保存的少量匹配记录不与身份关联，所以无法按人查找。如有任何问题，欢迎来信。</li>
@@ -139,7 +150,8 @@
   <li>“Help improve matching” (can be turned off): when you accept or revert a replacement, the app sends a random token plus “accept” or “revert”. The server stores the matched library ID, similarity statistics (no feature vectors, text or images), the action and the date (day only). Unused pending data is discarded after 30 minutes.</li>
   <li>Also under “Help improve matching” (from version 1.0 (4)): after each screenshot, the app reports how many stickers were replaced, offered as candidates, not found, or failed. For up to 16 crops that were not replaced, it includes the 768-number feature vector, recognized text (up to 40 characters) and size. The server <strong>stores</strong> these to measure real-world match rates and see what the library is missing. No screenshots, crop images, device identifiers or IP addresses; dates are kept to the day.</li>
   <li>The server keeps the time, IP address and request type of the last ~200 requests in memory only, for rate limiting and troubleshooting. They are never written to storage.</li>
-  <li>“Search by meaning” sends only the text you typed to Apple Private Cloud Compute, only when you tap it. It does not pass through our servers.</li>
+  <li>“Search by meaning” sends only the text you typed, only when you tap it. Without “AI enhancement” it goes to Apple Private Cloud Compute (supported devices only) and does not pass through our servers.</li>
+  <li><strong>“AI enhancement” is off by default.</strong> Only after you explicitly agree, the app sends downscaled sticker crops (JPEG, up to 360 px), their recognized text, library candidate IDs, and your “search by meaning” text through our server to a third-party AI provider — Zhipu AI (GLM) or Google (Gemini API), depending on server configuration — for caption generation, search expansion, and resolving uncertain matches. Our server forwards but does not store them; the provider processes them under its API terms and may retain them or use them to improve its services. No full screenshots or device identifiers are sent. You can turn it off at any time in the app.</li>
   <li>Service providers: Cloudflare (network), Oracle Cloud (server hosting), Cloudflare R2 (sticker library storage), Apple (Private Cloud Compute, distribution). We do not sell or share data with advertisers.</li>
   <li>Reporting: long-press any library sticker → “举报这张” (Report). The app opens your own mail app with the sticker ID, the reason, your optional note and the app version; you send it yourself. The reported sticker is hidden from search and recommendations on your device immediately; that hidden list stays on the device.</li>
   <li>Rights holders can request removal of a sticker at the email above (there is a direct button under “隐私与申诉” in the app); we review within 4 hours and remove verified items within 24 hours.</li>
